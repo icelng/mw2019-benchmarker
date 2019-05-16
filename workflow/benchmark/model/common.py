@@ -244,7 +244,6 @@ class Common:
             # noqa: E501
 
             scp {remote.user}@{hostname}:{remote.task_home}/../{file_name} {local.home}/{hostname}{file_name}
-            echo {self.task.team_id}/{self.task.task_id} > {local.home}/.osspath
             exit 0
         """.rstrip()
 
