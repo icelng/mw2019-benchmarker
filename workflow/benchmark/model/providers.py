@@ -6,13 +6,15 @@ from benchmark.model.error import WorkflowError
 
 class Providers(Common):
 
-    def __init__(self, config, task):
-        super(Providers, self).__init__(config, task)
+    def __init__(self, config, hostname, scale, task):
+        super(Providers, self).__init__(config, scale, task)
         self.logger = getLogger(__name__)
-        self.hostnames = [ self.config.provider_small_hostname,
-                self.config.provider_medium_hostname,
-                self.config.provider_large_hostname]
-        self.scales = ["small", "medium", "large"]
+        #self.hostnames = [ self.config.provider_small_hostname,
+        #        self.config.provider_medium_hostname,
+        #        self.config.provider_large_hostname]
+        #self.scales = ["small", "medium", "large"]
+        self.hostnames = [hostname]
+        self.scales = [scale]
         self.app_sha256 = self.config.provider_app_sha256
         self.script_sha256 = self.config.provider_script_sha256
 
@@ -24,6 +26,7 @@ class Providers(Common):
 
         self.logger.info(f">>> Start provider services on {hostname}.")
 
+        #remote = RemoteHost(self.config, scale, self.task)
         remote = self.workspace.remote
         task = self.task
         task_home = remote.task_home
@@ -61,6 +64,8 @@ class Providers(Common):
                 provider provider-{scale}
         """.rstrip()
 
+                #cat ~/.passwd | sudo -S -p '' \
+                #    docker run --network host --rm {ncat_image_path} \
         script += f"""
             # noqa: E501
 
@@ -68,9 +73,7 @@ class Providers(Common):
             MAX_ATTEMPTS={max_attempts}
             while true; do
                 echo "Trying to connect provider-small..."
-                cat ~/.passwd | sudo -S -p '' \
-                    docker run --network host --rm {ncat_image_path} \
-                    ncat -v -w 1 --send-only localhost {provider_port}; r1=$?
+                ncat -v -w 1 --send-only {hostname} {provider_port}; r1=$?
 
                 if [[ $r1 -eq 0 ]]; then
                     exit 0
@@ -152,3 +155,4 @@ class Providers(Common):
     def check_signatures(self):
         for hostname in self.hostnames:
             self._check_signatures(hostname, "provider", self.app_sha256, self.script_sha256)
+

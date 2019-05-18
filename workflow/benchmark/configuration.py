@@ -64,27 +64,31 @@ class Configuration():
 
     @property
     def provider_small_hostname(self):
-        return self.__get_value("ProviderSmallHost", REMOTE_SECTION)
+        return self.__get_value("AllInOneIp", REMOTE_SECTION)
 
     @property
     def provider_small_ip(self):
-        return self.__get_value("ProviderSmallIP", REMOTE_SECTION)
+        return self.__get_value("ProviderSmallIp", REMOTE_SECTION)
 
     @property
     def provider_medium_hostname(self):
-        return self.__get_value("ProviderMediumHost", REMOTE_SECTION)
+        return self.__get_value("AllInOneIp", REMOTE_SECTION)
 
     @property
     def provider_medium_ip(self):
-        return self.__get_value("ProviderMediumIP", REMOTE_SECTION)
+        return self.__get_value("ProviderMediumIp", REMOTE_SECTION)
 
     @property
     def provider_large_hostname(self):
-        return self.__get_value("ProviderLargeHost", REMOTE_SECTION)
+        return self.__get_value("AllInOneIp", REMOTE_SECTION)
 
     @property
     def provider_large_ip(self):
-        return self.__get_value("ProviderLargeIP", REMOTE_SECTION)
+        return self.__get_value("ProviderLargeIp", REMOTE_SECTION)
+
+    @property
+    def all_in_one_ip(self):
+        return self.__get_value("AllInOneIp", REMOTE_SECTION)
 
     @property
     def provider_small_port(self):
@@ -104,7 +108,7 @@ class Configuration():
 
     @property
     def consumer_hostname(self):
-        return self.__get_value("ConsumerHost", REMOTE_SECTION)
+        return self.__get_value("AllInOneIp", REMOTE_SECTION)
 
     @property
     def max_attempts(self):

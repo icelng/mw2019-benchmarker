@@ -46,10 +46,10 @@ class Common:
 
 
 
-    def __init__(self, config, task):
+    def __init__(self, config, endpoint_name, task):
         self.config = config
         self.task = task
-        self.workspace = Workspace(self.config, self.task)
+        self.workspace = Workspace(self.config, endpoint_name, self.task)
         self.logger = getLogger(__name__)
 
     def _unlock_remote_task_home(self, hostname):
@@ -95,9 +95,9 @@ class Common:
         script = f"""
             cat ~/.passwd | sudo -S -p '' docker build --no-cache \
                 --build-arg user_code_address={user_code_address} \
-                --tag={cname}:latest {remote.docker_file}/{self.DOCKERFILE_PREFIX_PATH}{cname}/
-            cat ~/.passwd | sudo -S -p '' docker pull {self.NCAT_IMAGE_PATH}
+                --tag={cname}:latest {remote.docker_file}/{self.DOCKERFILE_PREFIX_PATH}{cname}
         """.rstrip()
+            #cat ~/.passwd | sudo -S -p '' docker pull {self.NCAT_IMAGE_PATH}
 
         returncode, _, _ = self._run_remote_script(hostname, script)
         if returncode != 0:
@@ -107,7 +107,7 @@ class Common:
         self.logger.info('>>> Upload Dockerfile and entrypoint.sh .')
         remote = self.workspace.remote
         curPath = os.path.abspath(os.path.dirname(__file__))
-        rootPath = curPath[:curPath.find("benchmarker2019/") + len("benchmarker2019/")]
+        rootPath = curPath[:curPath.find("benchmarker/") + len("benchmarker/")]
         dockerfilePath = os.path.abspath(rootPath + 'dockerfile')
         script = f"""
                     if [[ -d {dockerfilePath} ]]; then

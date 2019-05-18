@@ -6,7 +6,7 @@ from benchmark.model.common import Common
 
 class Consumers(Common):
     def __init__(self, config, task):
-        super(Consumers, self).__init__(config, task)
+        super(Consumers, self).__init__(config, 'consumer', task)
         self.logger = getLogger(__name__)
         self.hostname = self.config.consumer_hostname
         self.app_sha256 = self.config.consumer_app_sha256
@@ -49,6 +49,9 @@ class Consumers(Common):
                 consumer
         """
 
+                #cat ~/.passwd | sudo -S -p '' \
+                #    docker run --network host --rm {ncat_image_path} \
+
         script += f"""
             # noqa: E501
 
@@ -56,9 +59,7 @@ class Consumers(Common):
             MAX_ATTEMPTS={max_attempts}
             while true; do
                 echo "Trying to connect consumer..."
-                cat ~/.passwd | sudo -S -p '' \
-                    docker run --network host --rm {ncat_image_path} \
-                    ncat -v -w 1 --send-only localhost {consumer_port}; r1=$?
+                ncat -v -w 1 --send-only localhost {consumer_port}; r1=$?
                 if [[ $? -eq 0 ]]; then
                     exit 0
                 fi
