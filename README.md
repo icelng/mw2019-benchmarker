@@ -29,7 +29,7 @@ $ brew install pipenv
 #### 1.1.4 克隆本代码仓库
 
 ```bash
-$ git clone https://code.aliyun.com/middlewarerace2019/benchmarker.git ~/benchmarker
+$ git clone https://github.com/yiranFancier/mw2019-benchmarker.git ~/benchmarker
 ```
 
 #### 1.1.5 创建 Python 运行环境
