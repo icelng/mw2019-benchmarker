@@ -1,6 +1,23 @@
+* 支持在一台机器上测试，在同一台机器里运行4个Docker实例，并为其绑定相应的CPU(--cpuset-cpus)，因此单机最好有十个以上的CPU核心。
+
+```
+consumer: 0, 1, 2, 3 
+provider-small: 4
+provider-medium: 5, 6
+provider-large: 7, 8, 9
+```
+* 把Docker实例的网络模式设置成host，consumer可通过Ip 0.0.0.0 访问到 small、medium以及large这三个实例。
+* 修改Dockerfile,每次构建Docker镜像时都会拉取internal-service最新代码并编译打包成最新的Jar包 (因为我发现里边的Jar包有点旧了，并不是由最新代码打包的)
+* 去掉包校验步骤，去掉日志打包步骤
+* 目前Ncat镜像是阿里中间件内部的镜像，脚本中又没有镜像login的逻辑，因此暂时还不能拉取，所以把这个镜像的拉取给干掉，用系统namp中的ncat代替之。运行脚本之前得先安装nmap(目的是使用ncat判断端口是否被开启来确定实例启动是否成功)
+```
+# apt install nmap
+（是的，我不知道在其它的平台怎么安装ncat）
+```
+
 # 2019阿里中间件性能挑战赛本地评测环境搭建指南
 
-## 一、前期准备
+## 一、前期准备 
 
 ### 1.1 部分软件安装
 
