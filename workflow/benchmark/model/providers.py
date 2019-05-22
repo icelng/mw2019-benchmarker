@@ -36,27 +36,33 @@ class Providers(Common):
         sleep = self.config.sleep_interval
 
         if scale == "small":
+            cpu_set = self.config.small_provider_cpu_set
             quota = self.config.small_provider_cpu_quota
             memory = self.config.small_provider_memory
             provider_port = self.config.provider_small_port
         elif scale == "medium":
+            cpu_set = self.config.medium_provider_cpu_set
             quota = self.config.medium_provider_cpu_quota
             memory = self.config.medium_provider_memory
             provider_port = self.config.provider_medium_port
         else:
+            cpu_set = self.config.large_provider_cpu_set
             quota = self.config.large_provider_cpu_quota
             memory = self.config.large_provider_memory
             provider_port = self.config.provider_large_port
+
+                #--cpu-period={period} \
+                #--cpu-quota={quota} \
 
         script = f"""
             PROVIDER_HOME={task_home}/provider-{scale}
             rm -rf $PROVIDER_HOME
             mkdir -p $PROVIDER_HOME/logs
             cat ~/.passwd | sudo -S -p '' docker run -d \
+                --net=host \
                 --name=provider-{scale} \
+                --cpuset-cpus={cpu_set} \
                 --cidfile=$PROVIDER_HOME/run.cid \
-                --cpu-period={period} \
-                --cpu-quota={quota} \
                 --memory={memory} \
                 --ulimit nofile=4096:20480 \
                 -p {provider_port}:{provider_port} \

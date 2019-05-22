@@ -175,5 +175,21 @@ class Configuration():
         return self.__get_value('ConsumerMemory', DOCKER_SECTION)
 
     @property
+    def consumer_cpu_set(self):
+        return self.__get_value('ConsumerCpuSet', DOCKER_SECTION)
+
+    @property
+    def small_provider_cpu_set(self):
+        return self.__get_value('SmallProviderCpuSet', DOCKER_SECTION)
+
+    @property
+    def medium_provider_cpu_set(self):
+        return self.__get_value('MediumProviderCpuSet', DOCKER_SECTION)
+
+    @property
+    def large_provider_cpu_set(self):
+        return self.__get_value('LargeProviderCpuSet', DOCKER_SECTION)
+
+    @property
     def user_code_address(self):
         return self.__get_value('DefaultCodeAddress')

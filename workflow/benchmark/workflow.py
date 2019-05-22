@@ -182,7 +182,7 @@ class Workflow(Common):
     def _collect_data(self):
         self.logger.info('>>> Collect data.')
         self._compute_result()
-        self.download_logs()
+        #self.download_logs()
 
     def download_logs(self):
         self.provider_small.download_logs()

@@ -19,6 +19,7 @@ class Consumers(Common):
         task_home = self.workspace.remote.task_home
         period = self.config.cpu_period
         quota = self.config.consumer_cpu_quota
+        cpu_set = self.config.consumer_cpu_set
         memory = self.config.consumer_memory
         image_path = self.task.image_path
         max_attempts = self.config.max_attempts
@@ -28,6 +29,9 @@ class Consumers(Common):
         provider_medium_ip = self.config.provider_medium_ip
         provider_large_ip = self.config.provider_large_ip
 
+                #--cpu-period={period} \
+                #--cpu-quota={quota} \
+
         script = f"""
             # noqa: E501
 
@@ -35,10 +39,10 @@ class Consumers(Common):
             rm -rf $CONSUMER_HOME
             mkdir -p $CONSUMER_HOME/logs
             cat ~/.passwd | sudo -S -p '' docker run -d \
+                --net=host \
                 --name=consumer \
+                --cpuset-cpus={cpu_set} \
                 --cidfile=$CONSUMER_HOME/run.cid \
-                --cpu-period={period} \
-                --cpu-quota={quota} \
                 --memory={memory} \
                 --ulimit nofile=4096:20480 \
                 -p {consumer_port}:{consumer_port} \
